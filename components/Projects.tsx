@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Container, Row, Col, Card, Badge, Modal } from 'react-bootstrap'
 import { useInView } from 'react-intersection-observer'
 import { FaGithub, FaExternalLinkAlt, FaEye, FaCode, FaRocket, FaChartLine } from 'react-icons/fa'
@@ -21,6 +21,23 @@ interface Project {
   status: string
   impact: string
   developmentProgress?: number
+  isFromGitHub?: boolean
+}
+
+interface GitHubRepo {
+  id: number
+  name: string
+  description: string
+  html_url: string
+  homepage: string
+  topics: string[]
+  language: string
+  created_at: string
+  updated_at: string
+  stargazers_count: number
+  forks_count: number
+  private: boolean
+  fork: boolean
 }
 
 const Projects = () => {
@@ -32,37 +49,13 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [showModal, setShowModal] = useState(false)
   const [showDevModal, setShowDevModal] = useState(false)
+  const [githubProjects, setGithubProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const projects: Project[] = [
+  // In-development projects (hardcoded)
+  const inDevelopmentProjects: Project[] = [
     {
-      id: 1,
-      title: 'Binance Futures Tracker',
-      shortDescription: 'Real-time cryptocurrency futures tracking with sentiment analysis',
-      fullDescription: 'A comprehensive cryptocurrency tracking application that provides real-time price monitoring, delta changes, and market sentiment analysis. Built with modern web technologies to deliver instant market insights.',
-      image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop',
-      technologies: ['React.js', 'Node.js', 'Express', 'Socket.IO', 'WebSocket', 'RSS-Parser'],
-      category: 'Full Stack',
-      features: [
-        'Custom WebSocket service for real-time price streaming',
-        'Responsive React UI with color-coded tables',
-        'Google News RSS integration with sentiment analysis',
-        'Real-time broadcasting of top 50 Binance futures',
-        'Predictive market trend analysis',
-        'Production-ready deployment on Render.com and Netlify'
-      ],
-      achievements: [
-        'Zero client-side polling for optimal performance',
-        'Real-time sentiment analysis for market predictions',
-        'Scalable WebSocket architecture',
-        'Environment-driven configuration'
-      ],
-      githubUrl: 'https://github.com/aishwaryabodhe1122/binance-futures-tracker',
-      liveUrl: 'https://binance-tracker-demo.netlify.app',
-      status: 'Completed',
-      impact: 'Improved trading decision-making with real-time data'
-    },
-    {
-      id: 2,
+      id: 1001,
       title: 'Personalized Content Aggregator',
       shortDescription: 'MERN stack platform for personalized content recommendations',
       fullDescription: 'An intelligent content aggregation platform that curates articles, videos, and social media feeds from multiple sources, delivering personalized recommendations to enhance user engagement.',
@@ -90,34 +83,7 @@ const Projects = () => {
       developmentProgress: 75
     },
     {
-      id: 3,
-      title: 'E-Commerce Analytics Dashboard',
-      shortDescription: 'Advanced analytics dashboard for e-commerce insights',
-      fullDescription: 'A comprehensive analytics dashboard providing deep insights into e-commerce performance, customer behavior, and sales trends with interactive visualizations and real-time data processing.',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
-      technologies: ['React.js', 'D3.js', 'Node.js', 'PostgreSQL', 'Chart.js', 'AWS'],
-      category: 'Data Visualization',
-      features: [
-        'Interactive data visualizations with D3.js',
-        'Real-time sales and performance metrics',
-        'Customer behavior analysis and segmentation',
-        'Predictive analytics for inventory management',
-        'Responsive dashboard design',
-        'Export functionality for reports'
-      ],
-      achievements: [
-        'Improved decision-making with data-driven insights',
-        'Real-time performance monitoring',
-        'Advanced filtering and drill-down capabilities',
-        'Mobile-responsive design'
-      ],
-      githubUrl: 'https://github.com/aishwaryabodhe1122/customer-sentiment',
-      liveUrl: 'https://ecommerce-analytics-demo.netlify.app',
-      status: 'Completed',
-      impact: 'Streamlined business intelligence and reporting'
-    },
-    {
-      id: 4,
+      id: 1002,
       title: 'Task Management System',
       shortDescription: 'Collaborative project management with real-time updates',
       fullDescription: 'A modern task management system designed for teams to collaborate effectively with real-time updates, file sharing, and comprehensive project tracking capabilities.',
@@ -146,13 +112,16 @@ const Projects = () => {
     }
   ]
 
-  const categories = ['All', 'Full Stack', 'Data Visualization', 'Productivity']
+  const categories = ['All', 'Full Stack', 'Data Visualization', 'Productivity', 'Web Development', 'Mobile', 'AI/ML', 'Backend', 'Frontend']
   const statusFilters = ['All', 'Completed', 'In Development']
   const [activeCategory, setActiveCategory] = useState('All')
   const [activeStatus, setActiveStatus] = useState('All')
   const [expandedFilter, setExpandedFilter] = useState<'category' | 'status' | null>(null)
 
-  const filteredProjects = projects.filter(project => {
+  // Combine GitHub projects (completed) with in-development projects
+  const allProjects = [...githubProjects, ...inDevelopmentProjects]
+
+  const filteredProjects = allProjects.filter(project => {
     const categoryMatch = activeCategory === 'All' || project.category === activeCategory
     const statusMatch = activeStatus === 'All' || project.status === activeStatus
     return categoryMatch && statusMatch
@@ -187,6 +156,584 @@ const Projects = () => {
   const toggleFilterExpansion = (filterType: 'category' | 'status') => {
     setExpandedFilter(expandedFilter === filterType ? null : filterType)
   }
+
+  // Fetch all public repositories as project cards
+  const fetchGitHubProjects = async () => {
+    try {
+      setLoading(true)
+      
+      // First, show fallback data for immediate loading
+      console.log('Loading initial fallback data...')
+      const fallbackProjects = getFallbackCompletedProjects()
+      setGithubProjects(fallbackProjects)
+      
+      // Then try to fetch all public repos in the background
+      setTimeout(async () => {
+        try {
+          console.log('Fetching all public repositories...')
+          
+          const headers: HeadersInit = {
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'Portfolio-App'
+          }
+          
+          const response = await fetch('https://api.github.com/users/aishwaryabodhe1122/repos?sort=updated&per_page=100&type=public', {
+            headers,
+            signal: AbortSignal.timeout(10000) // 10 second timeout
+          })
+          
+          if (response.ok) {
+            const repos: GitHubRepo[] = await response.json()
+            
+            if (Array.isArray(repos) && repos.length > 0) {
+              console.log(`Found ${repos.length} public repositories`)
+              
+              // Filter out forked repos and include only your original projects
+              const originalRepos = repos.filter(repo => 
+                !repo.fork && 
+                repo.name !== 'aishwaryabodhe1122' && // Exclude profile repo
+                repo.name !== '.github' // Exclude .github repo
+              )
+              
+              // Convert all repos to project format
+              const allProjects = originalRepos.map((repo, index) => ({
+                id: repo.id,
+                title: formatTitle(repo.name),
+                shortDescription: repo.description || 'A modern web application built with cutting-edge technologies',
+                fullDescription: getDetailedDescription(repo.name) || repo.description || 'A comprehensive project showcasing modern development practices and innovative solutions.',
+                image: getCuratedImageByTopics(repo.name, repo.topics || [], repo.language),
+                technologies: getTechnologiesFromRepo(repo.name, repo.language, repo.topics || []),
+                category: categorizeProject(repo.topics || [], repo.language),
+                features: getFeatures(repo.name),
+                achievements: getAchievements(repo.name),
+                githubUrl: repo.html_url,
+                liveUrl: repo.homepage || '',
+                status: 'Completed', // All public repos are considered completed
+                impact: generateImpact(repo.name),
+                isFromGitHub: true
+              }))
+              
+              console.log(`Converted ${allProjects.length} repositories to project cards`)
+              setGithubProjects(allProjects)
+            }
+          } else {
+            console.warn('GitHub API request failed:', response.status)
+          }
+        } catch (error) {
+          console.log('Background GitHub fetch failed, keeping fallback data:', error)
+        }
+      }, 500) // Small delay to not block initial render
+      
+      // Optional: Try GitHub API in background (non-blocking)
+      // This can be enabled later when rate limits are resolved
+      /*
+      setTimeout(async () => {
+        try {
+          const headers: HeadersInit = {
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'Portfolio-App'
+          }
+          
+          const response = await fetch('https://api.github.com/users/aishwaryabodhe1122/repos?sort=updated&per_page=100', {
+            headers,
+            signal: AbortSignal.timeout(5000) // 5 second timeout
+          })
+          
+          if (response.ok) {
+            const repos: GitHubRepo[] = await response.json()
+            if (Array.isArray(repos)) {
+              const completedRepoNames = ['binance-futures-tracker', 'customer-sentiment']
+              const completedRepos = repos.filter(repo => 
+                completedRepoNames.includes(repo.name) && !repo.private
+              )
+              
+              if (completedRepos.length > 0) {
+                // Update with live GitHub data if available
+                const projects = completedRepos.map(repo => ({
+                  id: repo.id,
+                  title: formatTitle(repo.name),
+                  shortDescription: repo.description || 'No description available',
+                  fullDescription: getDetailedDescription(repo.name),
+                  image: getCuratedImage(repo.name),
+                  technologies: getTechnologies(repo.name),
+                  category: categorizeProject(repo.topics, repo.language),
+                  features: getFeatures(repo.name),
+                  achievements: getAchievements(repo.name),
+                  githubUrl: repo.html_url,
+                  liveUrl: repo.homepage || '',
+                  status: 'Completed',
+                  impact: generateImpact(repo.name),
+                  isFromGitHub: true
+                }))
+                
+                setGithubProjects(projects)
+                console.log('Updated with live GitHub data')
+              }
+            }
+          }
+        } catch (error) {
+          console.log('Background GitHub fetch failed, using fallback data')
+        }
+      }, 100) // Small delay to not block initial render
+      */
+      
+    } catch (error) {
+      console.error('Error in fetchGitHubProjects:', error)
+      const fallbackProjects = getFallbackCompletedProjects()
+      setGithubProjects(fallbackProjects)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Optimized fallback completed projects data (fast loading)
+  const getFallbackCompletedProjects = (): Project[] => {
+    const completedRepoNames = ['binance-futures-tracker', 'customer-sentiment']
+    
+    return completedRepoNames.map((repoName, index) => ({
+      id: 2001 + index,
+      title: formatTitle(repoName),
+      shortDescription: repoName === 'binance-futures-tracker' 
+        ? 'Real-time cryptocurrency futures tracking with sentiment analysis'
+        : 'Advanced analytics dashboard for e-commerce insights',
+      fullDescription: getDetailedDescription(repoName),
+      image: getCuratedImage(repoName),
+      technologies: getTechnologies(repoName),
+      category: repoName === 'customer-sentiment' ? 'Data Visualization' : 'Full Stack',
+      features: getFeatures(repoName),
+      achievements: getAchievements(repoName),
+      githubUrl: `https://github.com/aishwaryabodhe1122/${repoName}`,
+      liveUrl: repoName === 'binance-futures-tracker' 
+        ? 'https://binance-tracker-demo.netlify.app'
+        : 'https://ecommerce-analytics-demo.netlify.app',
+      status: 'Completed',
+      impact: generateImpact(repoName),
+      isFromGitHub: false // Indicates this is optimized fallback data
+    }))
+  }
+
+  // Helper functions
+  const formatTitle = (repoName: string): string => {
+    return repoName
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
+  // Enhanced description fetching with multiple sources
+  const getDetailedDescription = (repoName: string): string => {
+    // Specific detailed descriptions for known projects
+    const descriptions: { [key: string]: string } = {
+      'binance-futures-tracker': 'A comprehensive cryptocurrency tracking application that provides real-time price monitoring, delta changes, and market sentiment analysis. Built with modern web technologies to deliver instant market insights.',
+      'customer-sentiment': 'A comprehensive analytics dashboard providing deep insights into e-commerce performance, customer behavior, and sales trends with interactive visualizations and real-time data processing.'
+    }
+    
+    return descriptions[repoName] || 'A modern web application built with cutting-edge technologies.'
+  }
+
+  // Function to fetch README description (can be enhanced for future use)
+  const getReadmeDescription = async (repoName: string): Promise<string | null> => {
+    try {
+      const response = await fetch(`https://api.github.com/repos/aishwaryabodhe1122/${repoName}/readme`)
+      if (response.ok) {
+        const data = await response.json()
+        const content = atob(data.content)
+        
+        // Extract description from README (first paragraph after title)
+        const lines = content.split('\n')
+        let description = ''
+        let foundTitle = false
+        
+        for (const line of lines) {
+          if (line.startsWith('# ') && !foundTitle) {
+            foundTitle = true
+            continue
+          }
+          if (foundTitle && line.trim() && !line.startsWith('#') && !line.startsWith('##')) {
+            description = line.trim()
+            break
+          }
+        }
+        
+        return description || null
+      }
+    } catch (error) {
+      console.log(`Could not fetch README for ${repoName}`)
+    }
+    return null
+  }
+
+  const fetchProjectImage = async (repoName: string, topics: string[]): Promise<string> => {
+    try {
+      // Due to GitHub's rate limiting on both API and OpenGraph service,
+      // let's use a more reliable approach with direct fallback to curated images
+      
+      console.log(`Fetching image for ${repoName} - using curated approach due to GitHub rate limits`)
+      
+      // For now, use curated high-quality images that match each project
+      // This ensures reliability and fast loading
+      const curatedImages: { [key: string]: string } = {
+        'customer-sentiment': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&q=80', // Analytics dashboard
+        'binance-futures-tracker': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop&q=80' // Crypto trading
+      }
+      
+      if (curatedImages[repoName]) {
+        console.log(`Using curated image for ${repoName}:`, curatedImages[repoName])
+        return curatedImages[repoName]
+      }
+      
+      // Alternative: Try GitHub social preview with your custom images
+      // Uncomment this section when you want to use your uploaded GitHub social previews
+      // and when GitHub rate limits are resolved
+      
+      /*
+      try {
+        const headers: HeadersInit = {
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Portfolio-App'
+        }
+        
+        const response = await fetch(`https://api.github.com/repos/aishwaryabodhe1122/${repoName}`, { headers })
+        
+        if (response.ok) {
+          const repoData = await response.json()
+          if (repoData.open_graph_image_url) {
+            // Test if the image loads without rate limit error
+            const testResponse = await fetch(repoData.open_graph_image_url, { method: 'HEAD' })
+            if (testResponse.ok) {
+              return repoData.open_graph_image_url
+            }
+          }
+        }
+      } catch (error) {
+        console.log(`GitHub social preview not available for ${repoName}, using curated image`)
+      }
+      */
+      
+      // For now, fall back to topic-based images
+      return getFallbackImage(repoName, topics)
+      
+    } catch (error) {
+      console.error(`Error fetching image for ${repoName}:`, error)
+      return getFallbackImage(repoName, topics)
+    }
+  }
+
+  const getFallbackImage = (repoName: string, topics: string[]): string => {
+    // Fallback images based on project type/topics
+    const topicImageMap: { [key: string]: string } = {
+      'cryptocurrency': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop',
+      'trading': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop',
+      'analytics': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      'dashboard': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      'ecommerce': 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop',
+      'react': 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=400&fit=crop',
+      'nodejs': 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=600&h=400&fit=crop'
+    }
+
+    // Check if any topic matches our image map
+    for (const topic of topics) {
+      if (topicImageMap[topic.toLowerCase()]) {
+        return topicImageMap[topic.toLowerCase()]
+      }
+    }
+
+    // Project-specific fallbacks
+    const projectImageMap: { [key: string]: string } = {
+      'binance-futures-tracker': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop',
+      'customer-sentiment': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop'
+    }
+
+    return projectImageMap[repoName] || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop'
+  }
+
+  const getCuratedImage = (repoName: string): string => {
+    // GitHub's OpenGraph service is showing the auto-generated card instead of your custom image
+    // This is a known GitHub caching issue. Let's try alternative approaches:
+    
+    // Option 1: Try different OpenGraph URL patterns
+    const baseUrl = `https://opengraph.githubassets.com`
+    const repoPath = `aishwaryabodhe1122/${repoName}`
+    
+    // Try different GitHub OpenGraph URL formats
+    const possibleUrls = [
+      `${baseUrl}/1/${repoPath}`,                    // Standard format
+      `${baseUrl}/0/${repoPath}`,                    // Alternative format
+      `${baseUrl}/${repoPath}`,                      // Direct format
+      `${baseUrl}/1/${repoPath}?t=${Date.now()}`,    // With cache busting
+    ]
+    
+    // For now, let's use a more reliable approach with your uploaded image
+    // Since GitHub's cache is showing the auto-generated card, let's use a direct approach
+    
+    // Since GitHub's OpenGraph cache is showing auto-generated cards instead of your custom images,
+    // let's use your actual uploaded images directly from a reliable source
+    
+    // Strategy: Try direct GitHub repository images first
+    // This is more reliable than OpenGraph service
+    
+    // Try both main and master branches, and multiple file locations
+    const directImageUrls = [
+      // Main branch attempts
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/banner.jpg`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/banner.png`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/preview.jpg`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/preview.png`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/screenshot.jpg`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/screenshot.png`,
+      // Master branch attempts (for older repos)
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/banner.jpg`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/banner.png`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/preview.jpg`,
+      // Folder locations
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/assets/banner.jpg`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/public/banner.jpg`,
+      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/docs/banner.jpg`
+    ]
+    
+    // Fallback to curated images if direct images don't exist
+    const fallbackImages: { [key: string]: string } = {
+      'customer-sentiment': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&q=90',
+      'binance-futures-tracker': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=400&fit=crop&q=90'
+    }
+    
+    console.log(`Trying direct GitHub image for ${repoName}:`, directImageUrls[0])
+    
+    // Since your direct GitHub URL works, let's use it directly
+    // This ensures we get your custom uploaded images
+    console.log(`Using direct GitHub image: ${directImageUrls[0]}`)
+    
+    return directImageUrls[0]
+  }
+
+  const getTechnologies = (repoName: string): string[] => {
+    const techMap: { [key: string]: string[] } = {
+      'binance-futures-tracker': ['React.js', 'Node.js', 'Express', 'Socket.IO', 'WebSocket', 'RSS-Parser'],
+      'customer-sentiment': ['React.js', 'D3.js', 'Node.js', 'PostgreSQL', 'Chart.js', 'AWS']
+    }
+    
+    return techMap[repoName] || ['React.js', 'Node.js', 'JavaScript']
+  }
+
+  // Enhanced function to get technologies from repository data
+  const getTechnologiesFromRepo = (repoName: string, language: string, topics: string[]): string[] => {
+    // First check if we have specific tech mapping
+    const specificTech = getTechnologies(repoName)
+    if (specificTech.length > 1) return specificTech
+    
+    // Generate technologies based on language and topics
+    const technologies: string[] = []
+    
+    // Add primary language
+    if (language) {
+      const languageMap: { [key: string]: string } = {
+        'JavaScript': 'JavaScript',
+        'TypeScript': 'TypeScript', 
+        'Python': 'Python',
+        'Java': 'Java',
+        'HTML': 'HTML/CSS',
+        'CSS': 'HTML/CSS',
+        'C++': 'C++',
+        'C': 'C',
+        'Go': 'Go',
+        'Rust': 'Rust',
+        'PHP': 'PHP'
+      }
+      technologies.push(languageMap[language] || language)
+    }
+    
+    // Add technologies based on topics
+    const topicTechMap: { [key: string]: string[] } = {
+      'react': ['React.js'],
+      'nextjs': ['Next.js'],
+      'nodejs': ['Node.js'],
+      'express': ['Express.js'],
+      'mongodb': ['MongoDB'],
+      'postgresql': ['PostgreSQL'],
+      'mysql': ['MySQL'],
+      'docker': ['Docker'],
+      'aws': ['AWS'],
+      'firebase': ['Firebase'],
+      'tailwindcss': ['Tailwind CSS'],
+      'bootstrap': ['Bootstrap'],
+      'vue': ['Vue.js'],
+      'angular': ['Angular'],
+      'django': ['Django'],
+      'flask': ['Flask'],
+      'spring': ['Spring Boot'],
+      'laravel': ['Laravel']
+    }
+    
+    topics.forEach(topic => {
+      const topicLower = topic.toLowerCase()
+      if (topicTechMap[topicLower]) {
+        technologies.push(...topicTechMap[topicLower])
+      }
+    })
+    
+    // Remove duplicates and limit to 6 technologies
+    const uniqueTech = Array.from(new Set(technologies))
+    return uniqueTech.slice(0, 6)
+  }
+
+  // Smart image selection based on repository topics and language
+  const getCuratedImageByTopics = (repoName: string, topics: string[], language: string): string => {
+    // First check for specific project images
+    const specificImages = getCuratedImage(repoName)
+    if (specificImages && !specificImages.includes('opengraph.githubassets.com')) {
+      return specificImages
+    }
+    
+    // Generate image based on topics and language
+    const topicImageMap: { [key: string]: string } = {
+      'web': 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=400&fit=crop&q=90',
+      'mobile': 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=400&fit=crop&q=90',
+      'ai': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop&q=90',
+      'machine-learning': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop&q=90',
+      'data': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&q=90',
+      'analytics': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&q=90',
+      'dashboard': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&q=90',
+      'api': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=400&fit=crop&q=90',
+      'backend': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=400&fit=crop&q=90',
+      'database': 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&h=400&fit=crop&q=90',
+      'blockchain': 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=400&fit=crop&q=90',
+      'cryptocurrency': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=400&fit=crop&q=90',
+      'game': 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=800&h=400&fit=crop&q=90',
+      'ecommerce': 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop&q=90',
+      'social': 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=400&fit=crop&q=90'
+    }
+    
+    // Check topics for matching images
+    for (const topic of topics) {
+      const topicLower = topic.toLowerCase()
+      if (topicImageMap[topicLower]) {
+        return topicImageMap[topicLower]
+      }
+    }
+    
+    // Language-based images
+    const languageImageMap: { [key: string]: string } = {
+      'JavaScript': 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&h=400&fit=crop&q=90',
+      'TypeScript': 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&h=400&fit=crop&q=90',
+      'Python': 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&h=400&fit=crop&q=90',
+      'Java': 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=400&fit=crop&q=90',
+      'HTML': 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=400&fit=crop&q=90',
+      'CSS': 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=400&fit=crop&q=90'
+    }
+    
+    if (language && languageImageMap[language]) {
+      return languageImageMap[language]
+    }
+    
+    // Default tech image
+    return 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop&q=90'
+  }
+
+  const getFeatures = (repoName: string): string[] => {
+    const featuresMap: { [key: string]: string[] } = {
+      'binance-futures-tracker': [
+        'Custom WebSocket service for real-time price streaming',
+        'Responsive React UI with color-coded tables',
+        'Google News RSS integration with sentiment analysis',
+        'Real-time broadcasting of top 50 Binance futures',
+        'Predictive market trend analysis',
+        'Production-ready deployment on Render.com and Netlify'
+      ],
+      'customer-sentiment': [
+        'Interactive data visualizations with D3.js',
+        'Real-time sales and performance metrics',
+        'Customer behavior analysis and segmentation',
+        'Predictive analytics for inventory management',
+        'Responsive dashboard design',
+        'Export functionality for reports'
+      ]
+    }
+    
+    return featuresMap[repoName] || ['Modern web application', 'Responsive design', 'Clean code architecture']
+  }
+
+  const getAchievements = (repoName: string): string[] => {
+    const achievementsMap: { [key: string]: string[] } = {
+      'binance-futures-tracker': [
+        'Zero client-side polling for optimal performance',
+        'Real-time sentiment analysis for market predictions',
+        'Scalable WebSocket architecture',
+        'Environment-driven configuration'
+      ],
+      'customer-sentiment': [
+        'Improved decision-making with data-driven insights',
+        'Real-time performance monitoring',
+        'Advanced filtering and drill-down capabilities',
+        'Mobile-responsive design'
+      ]
+    }
+    
+    return achievementsMap[repoName] || ['High performance', 'Scalable architecture', 'User-friendly interface']
+  }
+
+  const categorizeProject = (topics: string[], language: string): string => {
+    // Check topics for specific categories
+    const topicLower = topics.map(t => t.toLowerCase())
+    
+    if (topicLower.some(t => ['dashboard', 'analytics', 'data', 'visualization', 'chart'].includes(t))) {
+      return 'Data Visualization'
+    }
+    
+    if (topicLower.some(t => ['productivity', 'management', 'task', 'todo', 'calendar'].includes(t))) {
+      return 'Productivity'
+    }
+    
+    if (topicLower.some(t => ['mobile', 'android', 'ios', 'react-native', 'flutter'].includes(t))) {
+      return 'Mobile'
+    }
+    
+    if (topicLower.some(t => ['ai', 'ml', 'machine-learning', 'artificial-intelligence', 'neural', 'deep-learning'].includes(t))) {
+      return 'AI/ML'
+    }
+    
+    if (topicLower.some(t => ['api', 'backend', 'server', 'database', 'microservice'].includes(t))) {
+      return 'Backend'
+    }
+    
+    if (topicLower.some(t => ['frontend', 'ui', 'ux', 'css', 'html', 'design'].includes(t))) {
+      return 'Frontend'
+    }
+    
+    if (topicLower.some(t => ['web', 'website', 'webapp', 'react', 'vue', 'angular'].includes(t))) {
+      return 'Web Development'
+    }
+    
+    // Language-based categorization
+    if (language) {
+      const langLower = language.toLowerCase()
+      if (['python'].includes(langLower) && topicLower.some(t => ['ai', 'ml', 'data'].includes(t))) {
+        return 'AI/ML'
+      }
+      if (['javascript', 'typescript'].includes(langLower)) {
+        return 'Web Development'
+      }
+      if (['java', 'kotlin'].includes(langLower) && topicLower.some(t => ['android', 'mobile'].includes(t))) {
+        return 'Mobile'
+      }
+    }
+    
+    // Default to Full Stack for comprehensive projects
+    return 'Full Stack'
+  }
+
+  const generateImpact = (repoName: string): string => {
+    const impactMap: { [key: string]: string } = {
+      'binance-futures-tracker': 'Improved trading decision-making with real-time data',
+      'customer-sentiment': 'Streamlined business intelligence and reporting'
+    }
+    
+    return impactMap[repoName] || 'Enhanced user experience and productivity'
+  }
+
+  // Fetch GitHub projects on component mount
+  useEffect(() => {
+    fetchGitHubProjects()
+  }, [])
 
   return (
     <section id="projects" className="section-padding bg-pattern">
@@ -267,7 +814,17 @@ const Projects = () => {
 
         {/* Projects Grid */}
         <Row className="g-4" ref={ref}>
-          {filteredProjects.map((project, index) => (
+          {loading && githubProjects.length === 0 && (
+            <Col xs={12} className="text-center py-5">
+              <div className="loading-spinner">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading GitHub projects...</span>
+                </div>
+                <p className="mt-3 text-muted">Fetching projects from GitHub...</p>
+              </div>
+            </Col>
+          )}
+          {filteredProjects.map((project: Project, index: number) => (
             <Col lg={6} key={project.id}>
               <Card 
                 className={`project-card card-custom h-100 hover-lift ${inView ? 'animate-fadeInUp' : ''}`}
@@ -281,6 +838,43 @@ const Projects = () => {
                     width={600}
                     height={400}
                     className="project-image"
+                    onError={(e) => {
+                      // Multi-level fallback system for GitHub images
+                      const target = e.target as HTMLImageElement
+                      const currentSrc = target.src
+                      
+                      // Find the repo name from the project title
+                      const repoName = project.title.toLowerCase().replace(/\s+/g, '-')
+                      
+                      // Try alternative GitHub image paths first
+                      const alternativeUrls = [
+                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/banner.png`,
+                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/preview.jpg`,
+                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/screenshot.jpg`,
+                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/banner.jpg`,
+                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/banner.png`,
+                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/assets/banner.jpg`,
+                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/public/banner.jpg`
+                      ]
+                      
+                      // Check if we haven't tried these alternatives yet
+                      const notTriedYet = alternativeUrls.find(url => url !== currentSrc)
+                      
+                      if (notTriedYet) {
+                        console.log(`Trying alternative GitHub image: ${notTriedYet}`)
+                        target.src = notTriedYet
+                        return
+                      }
+                      
+                      // Final fallback to curated images
+                      const fallbackImages: { [key: string]: string } = {
+                        'customer-sentiment': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop&q=90',
+                        'binance-futures-tracker': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=400&fit=crop&q=90'
+                      }
+                      
+                      console.log(`Using final fallback image for ${repoName}`)
+                      target.src = fallbackImages[repoName] || getCuratedImageByTopics(repoName, project.technologies, project.technologies[0] || 'JavaScript')
+                    }}
                   />
                   <div className="project-overlay">
                     <div className="project-actions">
@@ -338,6 +932,16 @@ const Projects = () => {
                     >
                       {project.status}
                     </Badge>
+                    {project.isFromGitHub && (
+                      <Badge 
+                        bg="info" 
+                        className="github-badge ms-1"
+                        title="Fetched from GitHub"
+                      >
+                        <FaGithub className="me-1" />
+                        Live
+                      </Badge>
+                    )}
                   </div>
                 </div>
                 
@@ -756,6 +1360,13 @@ const Projects = () => {
         .status-badge {
           font-size: 0.75rem;
           padding: 6px 12px;
+        }
+
+        .github-badge {
+          font-size: 0.7rem;
+          padding: 4px 8px;
+          display: inline-flex;
+          align-items: center;
         }
 
         .category-badge {
