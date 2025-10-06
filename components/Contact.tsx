@@ -16,7 +16,7 @@ const Contact = () => {
       icon: FaEnvelope,
       title: 'Email',
       value: 'aishwaryabodhe1122@gmail.com',
-      link: 'mailto:aishwaryabodhe1122@gmail.com',
+      link: 'https://mail.google.com/mail/?view=cm&fs=1&to=aishwaryabodhe1122@gmail.com&su=Portfolio%20Inquiry&body=Hi%20Aishwarya,%0D%0A%0D%0AI%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect.%0D%0A%0D%0ABest%20regards',
       color: '#6366f1'
     },
     {
@@ -65,8 +65,8 @@ const Contact = () => {
                 <Col md={6} lg={3} key={index}>
                   <a 
                     href={info.link}
-                    target={info.title === 'LinkedIn' || info.title === 'Location' ? '_blank' : undefined}
-                    rel={info.title === 'LinkedIn' || info.title === 'Location' ? 'noopener noreferrer' : undefined}
+                    target={info.title === 'LinkedIn' || info.title === 'Location' || info.title === 'Email' ? '_blank' : undefined}
+                    rel={info.title === 'LinkedIn' || info.title === 'Location' || info.title === 'Email' ? 'noopener noreferrer' : undefined}
                     className="contact-card-link"
                   >
                     <Card className={`contact-card h-100 ${inView ? 'animate-fadeInUp' : ''}`} style={{ animationDelay: `${index * 0.1}s` }}>

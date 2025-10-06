@@ -118,7 +118,9 @@ const Hero = () => {
                   <FaLinkedin />
                 </a>
                 <a
-                  href="mailto:aishwaryabodhe1122@gmail.com"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=aishwaryabodhe1122@gmail.com&su=Portfolio%20Contact&body=Hi%20Aishwarya,%0D%0A%0D%0AI%20found%20your%20portfolio%20and%20would%20like%20to%20connect.%0D%0A%0D%0ABest%20regards"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-link email"
                 >
                   <FaEnvelope />
