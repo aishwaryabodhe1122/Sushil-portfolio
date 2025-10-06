@@ -112,7 +112,7 @@ const Projects = () => {
     }
   ]
 
-  const categories = ['All', 'Full Stack', 'Data Visualization', 'Productivity', 'Web Development', 'Mobile', 'AI/ML', 'Backend', 'Frontend']
+  const categories = ['All', 'Full Stack', 'Data Visualization', 'Productivity', 'Web Development']
   const statusFilters = ['All', 'Completed', 'In Development']
   const [activeCategory, setActiveCategory] = useState('All')
   const [activeStatus, setActiveStatus] = useState('All')

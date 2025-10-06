@@ -46,7 +46,7 @@ const Navigation = () => {
             handleNavClick('home')
           }}
         >
-          <FaCode className="me-2 gradient-text" />
+          {/* <FaCode className="me-2 gradient-text" /> */}
           <span className={scrolled ? 'text-dark' : 'text-white'}>
             Aishwarya Bodhe
           </span>
