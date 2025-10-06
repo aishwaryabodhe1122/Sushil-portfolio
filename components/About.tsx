@@ -11,7 +11,7 @@ const About = () => {
   })
 
   const stats = [
-    { icon: FaBriefcase, number: '2.8+', label: 'Years Experience' },
+    { icon: FaBriefcase, number: '3', label: 'Years Experience' },
     { icon: FaCode, number: '10+', label: 'Web Applications' },
     { icon: FaUsers, number: '98%', label: 'User Satisfaction' },
     { icon: FaRocket, number: '30%', label: 'Performance Boost' },

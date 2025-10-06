@@ -62,7 +62,7 @@ const Skills = () => {
   const categories = [
     {
       title: 'Frontend Development',
-      skills: ['React.js', 'Angular', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Bootstrap'],
+      skills: ['React.js', 'Next.js', 'Angular', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap'],
       icon: FaReact,
       color: '#61dafb'
     },
