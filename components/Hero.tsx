@@ -423,8 +423,8 @@ const Hero = () => {
         }
 
         .social-link.github {
-          border-color: #333;
-          color: #333;
+          border-color: white;
+          color: white;
         }
 
         .social-link.linkedin {
