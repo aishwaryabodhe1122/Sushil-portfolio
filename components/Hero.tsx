@@ -136,23 +136,6 @@ const Hero = () => {
               </div>
             </div>
           </Col>
-
-          {/* <Col lg={6} className="order-1 order-lg-2 text-center mb-5 mb-lg-0">
-            <div className="hero-image animate-fadeInRight">
-              <div className="image-container position-relative">
-                <div className="image-bg animate-pulse"></div>
-                <Image
-                  src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face"
-                  alt="Aishwarya Bodhe"
-                  width={400}
-                  height={400}
-                  className="profile-image"
-                  priority
-                />
-                <div className="image-overlay"></div>
-              </div>
-            </div>
-          </Col> */}
         </Row>
       </Container>
 

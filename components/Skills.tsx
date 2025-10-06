@@ -74,13 +74,13 @@ const Skills = () => {
     },
     {
       title: 'Database & Cloud',
-      skills: ['MongoDB', 'MySQL', 'AWS', 'Cloud Architecture', 'CI/CD'],
+      skills: ['MongoDB', 'MySQL', 'PostgreSQL', 'AWS', 'Cloud Architecture', 'CI/CD'],
       icon: FaDatabase,
       color: '#47a248'
     },
     {
       title: 'Tools & Methodologies',
-      skills: ['Git', 'GitHub', 'Agile', 'Unit Testing', 'Code Reviews', 'System Design'],
+      skills: ['Git', 'GitHub', 'Docker', 'Agile', 'Unit Testing', 'Code Reviews', 'System Design'],
       icon: FaGitAlt,
       color: '#f05032'
     },
