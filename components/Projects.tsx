@@ -150,6 +150,7 @@ const Projects = () => {
   const statusFilters = ['All', 'Completed', 'In Development']
   const [activeCategory, setActiveCategory] = useState('All')
   const [activeStatus, setActiveStatus] = useState('All')
+  const [expandedFilter, setExpandedFilter] = useState<'category' | 'status' | null>(null)
 
   const filteredProjects = projects.filter(project => {
     const categoryMatch = activeCategory === 'All' || project.category === activeCategory
@@ -183,6 +184,10 @@ const Projects = () => {
     setSelectedProject(null)
   }
 
+  const toggleFilterExpansion = (filterType: 'category' | 'status') => {
+    setExpandedFilter(expandedFilter === filterType ? null : filterType)
+  }
+
   return (
     <section id="projects" className="section-padding bg-pattern">
       <Container>
@@ -197,44 +202,65 @@ const Projects = () => {
           </Col>
         </Row>
 
-        {/* Category Filter */}
-        <Row className="justify-content-center mb-3">
-          <Col lg={8}>
-            <div className="filter-section text-center">
-              <h6 className="filter-label mb-3">Filter by Category</h6>
-              <div className="category-filter">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    className={`category-btn ${activeCategory === category ? 'active' : ''}`}
-                    onClick={() => setActiveCategory(category)}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </Col>
-        </Row>
-
-        {/* Status Filter */}
+        {/* Filter System */}
         <Row className="justify-content-center mb-5">
           <Col lg={8}>
-            <div className="filter-section text-center">
-              <h6 className="filter-label mb-3">Filter by Status</h6>
-              <div className="status-filter">
-                {statusFilters.map((status) => (
-                  <button
-                    key={status}
-                    className={`status-btn ${activeStatus === status ? 'active' : ''}`}
-                    onClick={() => setActiveStatus(status)}
-                  >
-                    {status === 'Completed' && '✅ '}
-                    {status === 'In Development' && '🚧 '}
-                    {status}
-                  </button>
-                ))}
+            <div className="filter-system text-center">
+              {/* Main Filter Buttons */}
+              <div className="main-filter-buttons mb-4">
+                <button
+                  className={`main-filter-btn ${expandedFilter === 'category' ? 'active' : ''}`}
+                  onClick={() => toggleFilterExpansion('category')}
+                >
+                  🏷️ Filter by Category
+                  <span className={`arrow ${expandedFilter === 'category' ? 'expanded' : ''}`}>▼</span>
+                </button>
+                <button
+                  className={`main-filter-btn ${expandedFilter === 'status' ? 'active' : ''}`}
+                  onClick={() => toggleFilterExpansion('status')}
+                >
+                  📊 Filter by Status
+                  <span className={`arrow ${expandedFilter === 'status' ? 'expanded' : ''}`}>▼</span>
+                </button>
               </div>
+
+              {/* Category Filter - Expandable */}
+              {expandedFilter === 'category' && (
+                <div className="expandable-filter category-filter animate-slideDown">
+                  <h6 className="filter-subtitle mb-3">Select Category</h6>
+                  <div className="filter-buttons">
+                    {categories.map((category) => (
+                      <button
+                        key={category}
+                        className={`category-btn ${activeCategory === category ? 'active' : ''}`}
+                        onClick={() => setActiveCategory(category)}
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Status Filter - Expandable */}
+              {expandedFilter === 'status' && (
+                <div className="expandable-filter status-filter animate-slideDown">
+                  <h6 className="filter-subtitle mb-3">Select Status</h6>
+                  <div className="filter-buttons">
+                    {statusFilters.map((status) => (
+                      <button
+                        key={status}
+                        className={`status-btn ${activeStatus === status ? 'active' : ''}`}
+                        onClick={() => setActiveStatus(status)}
+                      >
+                        {status === 'Completed' && '✅ '}
+                        {status === 'In Development' && '🚧 '}
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </Col>
         </Row>
@@ -544,14 +570,88 @@ const Projects = () => {
           transform: translateY(-2px);
         }
 
-        .filter-label {
+        .filter-system {
+          margin-bottom: 2rem;
+        }
+
+        .main-filter-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+
+        .main-filter-btn {
+          background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+          border: 2px solid rgba(99, 102, 241, 0.3);
+          color: #374151;
+          padding: 15px 30px;
+          border-radius: 30px;
+          font-weight: 600;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          min-width: 200px;
+          justify-content: space-between;
+        }
+
+        .main-filter-btn:hover,
+        .main-filter-btn.active {
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          border-color: transparent;
+          color: white;
+          transform: translateY(-3px);
+          box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .arrow {
+          transition: transform 0.3s ease;
+          font-size: 0.8rem;
+        }
+
+        .arrow.expanded {
+          transform: rotate(180deg);
+        }
+
+        .expandable-filter {
+          background: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(10px);
+          border-radius: 20px;
+          padding: 25px;
+          margin-top: 20px;
+          border: 1px solid rgba(99, 102, 241, 0.2);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-subtitle {
           color: #374151;
           font-weight: 600;
           margin-bottom: 1rem;
         }
 
-        .status-filter {
-          margin-bottom: 2rem;
+        .filter-buttons {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out;
         }
 
         .status-btn {
@@ -794,7 +894,17 @@ const Projects = () => {
             margin: 0 6px 6px 0;
           }
 
-          .filter-label {
+          .main-filter-btn {
+            padding: 12px 20px;
+            font-size: 0.875rem;
+            min-width: 160px;
+          }
+
+          .expandable-filter {
+            padding: 20px 15px;
+          }
+
+          .filter-subtitle {
             font-size: 0.875rem;
           }
           
