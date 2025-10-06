@@ -147,11 +147,15 @@ const Projects = () => {
   ]
 
   const categories = ['All', 'Full Stack', 'Data Visualization', 'Productivity']
+  const statusFilters = ['All', 'Completed', 'In Development']
   const [activeCategory, setActiveCategory] = useState('All')
+  const [activeStatus, setActiveStatus] = useState('All')
 
-  const filteredProjects = activeCategory === 'All' 
-    ? projects 
-    : projects.filter(project => project.category === activeCategory)
+  const filteredProjects = projects.filter(project => {
+    const categoryMatch = activeCategory === 'All' || project.category === activeCategory
+    const statusMatch = activeStatus === 'All' || project.status === activeStatus
+    return categoryMatch && statusMatch
+  })
 
   const handleProjectClick = (project: Project) => {
     if (project.status === 'Completed') {
@@ -194,18 +198,43 @@ const Projects = () => {
         </Row>
 
         {/* Category Filter */}
+        <Row className="justify-content-center mb-3">
+          <Col lg={8}>
+            <div className="filter-section text-center">
+              <h6 className="filter-label mb-3">Filter by Category</h6>
+              <div className="category-filter">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    className={`category-btn ${activeCategory === category ? 'active' : ''}`}
+                    onClick={() => setActiveCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Col>
+        </Row>
+
+        {/* Status Filter */}
         <Row className="justify-content-center mb-5">
           <Col lg={8}>
-            <div className="category-filter text-center">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  className={`category-btn ${activeCategory === category ? 'active' : ''}`}
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
+            <div className="filter-section text-center">
+              <h6 className="filter-label mb-3">Filter by Status</h6>
+              <div className="status-filter">
+                {statusFilters.map((status) => (
+                  <button
+                    key={status}
+                    className={`status-btn ${activeStatus === status ? 'active' : ''}`}
+                    onClick={() => setActiveStatus(status)}
+                  >
+                    {status === 'Completed' && '✅ '}
+                    {status === 'In Development' && '🚧 '}
+                    {status}
+                  </button>
+                ))}
+              </div>
             </div>
           </Col>
         </Row>
@@ -515,6 +544,39 @@ const Projects = () => {
           transform: translateY(-2px);
         }
 
+        .filter-label {
+          color: #374151;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+
+        .status-filter {
+          margin-bottom: 2rem;
+        }
+
+        .status-btn {
+          background: transparent;
+          border: 2px solid rgba(139, 92, 246, 0.2);
+          color: #6b7280;
+          padding: 10px 20px;
+          border-radius: 25px;
+          margin: 0 8px 8px 0;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .status-btn:hover,
+        .status-btn.active {
+          background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+          border-color: transparent;
+          color: white;
+          transform: translateY(-2px);
+        }
+
         .project-card {
           overflow: hidden;
           transition: all 0.3s ease;
@@ -723,6 +785,16 @@ const Projects = () => {
           
           .category-btn {
             padding: 8px 16px;
+            font-size: 0.875rem;
+          }
+
+          .status-btn {
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            margin: 0 6px 6px 0;
+          }
+
+          .filter-label {
             font-size: 0.875rem;
           }
           
