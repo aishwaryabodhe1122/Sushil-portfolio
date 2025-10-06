@@ -13,7 +13,7 @@ const Hero = () => {
   const texts = [
     'Full Stack Developer',
     'MEAN/MERN Stack Expert',
-    'Problem Solver'
+    'AI/ML Enthusiast'
   ]
 
   useEffect(() => {
