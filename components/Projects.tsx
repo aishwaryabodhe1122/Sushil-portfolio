@@ -76,7 +76,7 @@ const Projects = () => {
         'Optimized performance with React optimization techniques',
         'Scalable recommendation engine'
       ],
-      githubUrl: 'https://github.com/aishwaryabodhe1122/content-aggregator',
+      githubUrl: 'https://github.com/Sushil9731/content-aggregator',
       liveUrl: 'https://content-aggregator-demo.netlify.app',
       status: 'In Development',
       impact: 'Enhanced user experience through personalized content',
@@ -104,7 +104,7 @@ const Projects = () => {
         'Intuitive user interface design',
         'Scalable architecture for growing teams'
       ],
-      githubUrl: 'https://github.com/aishwaryabodhe1122/task-management',
+      githubUrl: 'https://github.com/Sushil9731/task-management',
       liveUrl: 'https://task-manager-demo.netlify.app',
       status: 'In Development',
       impact: 'Enhanced team collaboration and productivity',
@@ -177,7 +177,7 @@ const Projects = () => {
             'User-Agent': 'Portfolio-App'
           }
           
-          const response = await fetch('https://api.github.com/users/aishwaryabodhe1122/repos?sort=updated&per_page=100&type=public', {
+          const response = await fetch('https://api.github.com/users/chaudharisushil96/repos?sort=updated&per_page=100&type=public', {
             headers,
             signal: AbortSignal.timeout(10000) // 10 second timeout
           })
@@ -191,7 +191,7 @@ const Projects = () => {
               // Filter out forked repos and include only your original projects
               const originalRepos = repos.filter(repo => 
                 !repo.fork && 
-                repo.name !== 'aishwaryabodhe1122' && // Exclude profile repo
+                repo.name !== 'chaudharisushil96' && // Exclude profile repo
                 repo.name !== '.github' // Exclude .github repo
               )
               
@@ -234,7 +234,7 @@ const Projects = () => {
             'User-Agent': 'Portfolio-App'
           }
           
-          const response = await fetch('https://api.github.com/users/aishwaryabodhe1122/repos?sort=updated&per_page=100', {
+          const response = await fetch('https://api.github.com/users/chaudharisushil96/repos?sort=updated&per_page=100', {
             headers,
             signal: AbortSignal.timeout(5000) // 5 second timeout
           })
@@ -302,7 +302,7 @@ const Projects = () => {
       category: repoName === 'customer-sentiment' ? 'Data Visualization' : 'Full Stack',
       features: getFeatures(repoName),
       achievements: getAchievements(repoName),
-      githubUrl: `https://github.com/aishwaryabodhe1122/${repoName}`,
+      githubUrl: `https://github.com/Sushil9731/${repoName}`,
       liveUrl: repoName === 'binance-futures-tracker' 
         ? 'https://binance-tracker-demo.netlify.app'
         : 'https://ecommerce-analytics-demo.netlify.app',
@@ -334,7 +334,7 @@ const Projects = () => {
   // Function to fetch README description (can be enhanced for future use)
   const getReadmeDescription = async (repoName: string): Promise<string | null> => {
     try {
-      const response = await fetch(`https://api.github.com/repos/aishwaryabodhe1122/${repoName}/readme`)
+      const response = await fetch(`https://api.github.com/repos/chaudharisushil96/${repoName}/readme`)
       if (response.ok) {
         const data = await response.json()
         const content = atob(data.content)
@@ -393,7 +393,7 @@ const Projects = () => {
           'User-Agent': 'Portfolio-App'
         }
         
-        const response = await fetch(`https://api.github.com/repos/aishwaryabodhe1122/${repoName}`, { headers })
+        const response = await fetch(`https://api.github.com/repos/chaudharisushil96/${repoName}`, { headers })
         
         if (response.ok) {
           const repoData = await response.json()
@@ -453,7 +453,7 @@ const Projects = () => {
     
     // Option 1: Try different OpenGraph URL patterns
     const baseUrl = `https://opengraph.githubassets.com`
-    const repoPath = `aishwaryabodhe1122/${repoName}`
+    const repoPath = `chaudharisushil96/${repoName}`
     
     // Try different GitHub OpenGraph URL formats
     const possibleUrls = [
@@ -475,20 +475,20 @@ const Projects = () => {
     // Try both main and master branches, and multiple file locations
     const directImageUrls = [
       // Main branch attempts
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/banner.jpg`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/banner.png`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/preview.jpg`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/preview.png`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/screenshot.jpg`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/screenshot.png`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/banner.jpg`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/banner.png`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/preview.jpg`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/preview.png`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/screenshot.jpg`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/screenshot.png`,
       // Master branch attempts (for older repos)
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/banner.jpg`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/banner.png`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/preview.jpg`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/master/banner.jpg`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/master/banner.png`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/master/preview.jpg`,
       // Folder locations
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/assets/banner.jpg`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/public/banner.jpg`,
-      `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/docs/banner.jpg`
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/assets/banner.jpg`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/public/banner.jpg`,
+      `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/docs/banner.jpg`
     ]
     
     // Fallback to curated images if direct images don't exist
@@ -848,13 +848,13 @@ const Projects = () => {
                       
                       // Try alternative GitHub image paths first
                       const alternativeUrls = [
-                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/banner.png`,
-                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/preview.jpg`,
-                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/screenshot.jpg`,
-                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/banner.jpg`,
-                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/master/banner.png`,
-                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/assets/banner.jpg`,
-                        `https://raw.githubusercontent.com/aishwaryabodhe1122/${repoName}/main/public/banner.jpg`
+                        `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/banner.png`,
+                        `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/preview.jpg`,
+                        `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/screenshot.jpg`,
+                        `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/master/banner.jpg`,
+                        `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/master/banner.png`,
+                        `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/assets/banner.jpg`,
+                        `https://raw.githubusercontent.com/chaudharisushil96/${repoName}/main/public/banner.jpg`
                       ]
                       
                       // Check if we haven't tried these alternatives yet

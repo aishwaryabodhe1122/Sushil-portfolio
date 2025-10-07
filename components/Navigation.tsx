@@ -48,7 +48,7 @@ const Navigation = () => {
         >
           {/* <FaCode className="me-2 gradient-text" /> */}
           <span className={scrolled ? 'text-dark' : 'text-white'}>
-            Aishwarya Bodhe
+            Sushil Chaudhari
           </span>
         </Navbar.Brand>
 

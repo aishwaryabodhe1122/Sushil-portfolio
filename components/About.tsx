@@ -61,21 +61,23 @@ const About = () => {
                 Crafting Digital Solutions with{' '}
                 <span className="gradient-text">Precision</span>
               </h3>
-              
+
               <p className="text-muted mb-4">
-                I'm a dedicated Software Engineer with 2.8 years of experience at Accenture, 
-                specializing in designing and developing robust, scalable applications. My journey 
-                combines technical expertise with continuous learning, currently pursuing an MBA 
-                in Artificial Intelligence and Machine Learning.
+                Certified (C-DAC) with hands-on internship experience in Java, Spring Boot. Proven track record of building scalable
+                backend systems and delivering enterprise-grade microservices.Successfully led project Payment Integration using Java,
+                Spring Boot, and REST APIs—driving a 30%+ boost in client conversion rates. Proficient in designing RESTful APIs,
+                integrating payment gateways, and deploying secure, high-performance services using Java, Spring Boot, and AWS. Skilled
+                in system design, data structures, Redis caching, OAuth 2.0 authentication, and DevOps tools for CI/CD pipelines. Adept
+                at Agile methodologies and cross-functional team collaboration to deliver robust, maintainable code.
               </p>
-              
+
               <p className="text-muted mb-4">
-                My passion lies in creating innovative solutions that not only meet business 
-                objectives but also deliver exceptional user experiences. I thrive in collaborative 
-                environments and have successfully led cross-functional teams to deliver projects 
+                My passion lies in creating innovative solutions that not only meet business
+                objectives but also deliver exceptional user experiences. I thrive in collaborative
+                environments and have successfully led cross-functional teams to deliver projects
                 on schedule while maintaining high code quality standards.
               </p>
-              
+
               <div className="d-flex flex-wrap gap-3 mb-4">
                 <span className="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
                   Full Stack Development
@@ -87,22 +89,22 @@ const About = () => {
                   Agile Leadership
                 </span>
                 <span className="badge bg-warning-subtle text-warning px-3 py-2 rounded-pill">
-                  AI/ML Enthusiast
+                  Java Expert
                 </span>
               </div>
-              
+
               <a href="#contact" className="btn-primary-custom">
                 Let's Work Together
               </a>
             </div>
           </Col>
-          
+
           <Col lg={6}>
             <Row className="g-4">
               {stats.map((stat, index) => (
                 <Col sm={6} key={index}>
-                  <Card className={`card-custom text-center h-100 hover-lift ${inView ? 'animate-fadeInUp' : ''}`} 
-                        style={{ animationDelay: `${index * 0.1}s` }}>
+                  <Card className={`card-custom text-center h-100 hover-lift ${inView ? 'animate-fadeInUp' : ''}`}
+                    style={{ animationDelay: `${index * 0.1}s` }}>
                     <Card.Body className="p-4">
                       <div className="mb-3">
                         <stat.icon className="fs-1 gradient-text" />
@@ -121,7 +123,7 @@ const About = () => {
           {highlights.map((highlight, index) => (
             <Col lg={6} key={index}>
               <Card className={`card-custom h-100 hover-lift ${inView ? 'animate-fadeInUp' : ''}`}
-                    style={{ animationDelay: `${(index + 4) * 0.1}s` }}>
+                style={{ animationDelay: `${(index + 4) * 0.1}s` }}>
                 <Card.Body className="p-4">
                   <div className="d-flex align-items-start">
                     <div className="flex-shrink-0 me-3">

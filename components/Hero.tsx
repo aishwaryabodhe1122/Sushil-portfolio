@@ -12,8 +12,8 @@ const Hero = () => {
 
   const texts = [
     'Full Stack Developer',
-    'MEAN/MERN Stack Expert',
-    'AI/ML Enthusiast'
+    'Java Expert',
+    'Advanced Computing Enthusiast'
   ]
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const Hero = () => {
 
               <h1 className="display-1 fw-bold mb-3 text-white">
                 Hi, I'm{' '}
-                <span className="gradient-text">Aishwarya</span>
+                <span className="gradient-text">Sushil</span>
               </h1>
 
               <div className="typing-container mb-4">
@@ -89,7 +89,8 @@ const Hero = () => {
               </div>
 
               <p className="lead text-white-75 mb-4 pe-lg-5">
-                Software Engineer expert in JS/TS frameworks. AI Enthusiast working on AI/ML projects with modern high end technologies. Skilled in MEAN/MERN stack, AWS, and modern web technologies.
+                Software Engineer expert in Java frameworks. Skilled in designing RESTful APIs,
+                integrating payment gateways, and deploying secure, high-performance services using Java, Spring Boot, and AWS.
               </p>
 
               <div className="hero-buttons mb-4 d-flex flex-column flex-sm-row gap-3 justify-content-start align-items-start">
@@ -102,7 +103,7 @@ const Hero = () => {
               </div>
               <div className="social-links d-flex justify-content-start gap-3">
                 <a
-                  href="https://github.com/aishwaryabodhe1122"
+                  href="https://github.com/Sushil9731"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link github"
@@ -110,7 +111,7 @@ const Hero = () => {
                   <FaGithub />
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/aishwarya-bodhe/"
+                  href="https://www.linkedin.com/in/sushil-chaudhari-54460319b/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link linkedin"
@@ -118,7 +119,7 @@ const Hero = () => {
                   <FaLinkedin />
                 </a>
                 <a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=aishwaryabodhe1122@gmail.com&su=Portfolio%20Contact&body=Hi%20Aishwarya,%0D%0A%0D%0AI%20found%20your%20portfolio%20and%20would%20like%20to%20connect.%0D%0A%0D%0ABest%20regards"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=chaudharisushil96@gmail.com&su=Portfolio%20Contact&body=Hi%20Sushil,%0D%0A%0D%0AI%20found%20your%20portfolio%20and%20would%20like%20to%20connect.%0D%0A%0D%0ABest%20regards"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link email"

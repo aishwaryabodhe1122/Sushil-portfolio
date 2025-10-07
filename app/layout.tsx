@@ -6,10 +6,10 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Aishwarya Bodhe - Full Stack Developer',
-  description: 'Software Engineer with 2.8 years of experience in designing and developing robust applications. Skilled in MEAN/MERN stack, AWS, and modern web technologies.',
-  keywords: 'Full Stack Developer, Software Engineer, React, Node.js, AWS, MEAN Stack, MERN Stack',
-  authors: [{ name: 'Aishwarya Bodhe' }],
+  title: 'Sushil Chaudhari - Full Stack Developer',
+  description: 'Certified (C-DAC) with hands-on internship experience in Java, Spring Boot. Proven track record of building scalable backend systems and delivering enterprise-grade microservices. Proficient in designing RESTful APIs, integrating payment gateways, and deploying secure, high-performance services using Java, Spring Boot, and AWS.',
+  keywords: 'Full Stack Developer, Software Engineer, Java, AWS',
+  authors: [{ name: 'Sushil Chaudhari' }],
   viewport: 'width=device-width, initial-scale=1',
 }
 

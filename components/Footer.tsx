@@ -33,14 +33,14 @@ const Footer = () => {
           {/* Brand and Description */}
           <Col lg={4} md={6}>
             <div className="footer-brand mb-4">
-              <h4 className="h4 fw-bold text-white mb-3">Aishwarya Bodhe</h4>
+              <h4 className="h4 fw-bold text-white mb-3">Sushil Chaudhari</h4>
               <p className="text-white-75 mb-4">
                 Full Stack Developer passionate about creating innovative solutions 
                 and delivering exceptional user experiences through modern web technologies.
               </p>
               <div className="social-links">
                 <a 
-                  href="https://github.com/aishwaryabodhe1122"
+                  href="https://github.com/Sushil9731"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link"
@@ -49,7 +49,7 @@ const Footer = () => {
                   <FaGithub />
                 </a>
                 <a 
-                  href="https://linkedin.com/in/aishwarya-bodhe"
+                  href="https://www.linkedin.com/in/sushil-chaudhari-54460319b/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link"
@@ -58,7 +58,7 @@ const Footer = () => {
                   <FaLinkedin />
                 </a>
                 <a 
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=aishwaryabodhe1122@gmail.com&su=Portfolio%20Contact&body=Hi%20Aishwarya,%0D%0A%0D%0AI%20visited%20your%20portfolio%20and%20would%20like%20to%20get%20in%20touch.%0D%0A%0D%0ABest%20regards"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=chaudharisushil96@gmail.com&su=Portfolio%20Contact&body=Hi%20Sushil,%0D%0A%0D%0AI%20visited%20your%20portfolio%20and%20would%20like%20to%20get%20in%20touch.%0D%0A%0D%0ABest%20regards"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link"
@@ -116,11 +116,11 @@ const Footer = () => {
               <div className="contact-info">
                 <p className="text-white-75 mb-2">
                   <strong>Email:</strong><br />
-                  aishwaryabodhe1122@gmail.com
+                  chaudharisushil96@gmail.com
                 </p>
                 <p className="text-white-75 mb-2">
                   <strong>Phone:</strong><br />
-                  +91 8317206235
+                  +91 8830889788
                 </p>
                 <p className="text-white-75 mb-3">
                   <strong>Location:</strong><br />
@@ -132,26 +132,6 @@ const Footer = () => {
                 </div>
               </div>
             </div>
-          </Col>
-        </Row>
-
-        <hr className="footer-divider" />
-
-        {/* Bottom Footer */}
-        <Row className="align-items-center">
-          <Col md={6}>
-            <p className="text-white-50 mb-0">
-              © {currentYear} Aishwarya Bodhe.
-            </p>
-          </Col>
-          <Col md={6} className="text-md-end">
-            <button 
-              onClick={scrollToTop}
-              className="scroll-to-top"
-              aria-label="Scroll to top"
-            >
-              <FaArrowUp />
-            </button>
           </Col>
         </Row>
       </Container>

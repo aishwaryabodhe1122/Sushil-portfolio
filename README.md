@@ -1,4 +1,4 @@
-# Aishwarya Bodhe - Portfolio Website
+# Sushil Chaudhari - Portfolio Website
 
 A modern, responsive portfolio website built with Next.js, React, and Python FastAPI backend. Features beautiful animations, interactive components, and a foundation for future AI integrations.
 
@@ -58,7 +58,7 @@ A modern, responsive portfolio website built with Next.js, React, and Python Fas
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/aishwaryabodhe/portfolio.git
+   git clone https://github.com/SushilChaudhari/portfolio.git
    cd portfolio
    ```
 
@@ -210,11 +210,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact
 
-**Aishwarya Bodhe**
-- Email: aishwaryabodhe1122@gmail.com
-- LinkedIn: [linkedin.com/in/aishwarya-bodhe](https://linkedin.com/in/aishwarya-bodhe)
-- GitHub: [github.com/aishwaryabodhe](https://github.com/aishwaryabodhe)
-- Phone: +91 8317206235
+**Sushil Chaudhari**
+- Email: chaudharisushil96@gmail.com
+- LinkedIn: [linkedin.com/in/Sushil-Chaudhari](https://www.linkedin.com/in/sushil-chaudhari-54460319b/)
+- GitHub: [github.com/SushilChaudhari](https://github.com/SushilChaudhari)
+- Phone: +91 8830889788
 - Location: Pune, Maharashtra, India
 
 ## 🙏 Acknowledgments
@@ -227,4 +227,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ by Aishwarya Bodhe**
+**Made with ❤️ by Sushil Chaudhari**

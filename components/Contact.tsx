@@ -15,15 +15,15 @@ const Contact = () => {
     {
       icon: FaEnvelope,
       title: 'Email',
-      value: 'aishwaryabodhe1122@gmail.com',
-      link: 'https://mail.google.com/mail/?view=cm&fs=1&to=aishwaryabodhe1122@gmail.com&su=Portfolio%20Inquiry&body=Hi%20Aishwarya,%0D%0A%0D%0AI%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect.%0D%0A%0D%0ABest%20regards',
+      value: 'chaudharisushil96@gmail.com',
+      link: 'https://mail.google.com/mail/?view=cm&fs=1&to=chaudharisushil96@gmail.com&su=Portfolio%20Inquiry&body=Hi%20Sushil,%0D%0A%0D%0AI%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect.%0D%0A%0D%0ABest%20regards',
       color: '#6366f1'
     },
     {
       icon: FaPhone,
       title: 'Phone',
-      value: '+91 8317206235',
-      link: 'tel:+918317206235',
+      value: '+91 8830889788',
+      link: 'tel:+918830889788',
       color: '#22c55e'
     },
     {
@@ -36,8 +36,8 @@ const Contact = () => {
     {
       icon: FaLinkedin,
       title: 'LinkedIn',
-      value: 'linkedin.com/in/aishwarya-bodhe',
-      link: 'https://linkedin.com/in/aishwarya-bodhe',
+      value: 'linkedin.com/in/Sushil-Chaudhari',
+      link: 'https://www.linkedin.com/in/sushil-chaudhari-54460319b/',
       color: '#0077b5'
     }
   ]
@@ -110,7 +110,7 @@ const Contact = () => {
                     </p>
                     <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
                       <a 
-                        href="https://mail.google.com/mail/?view=cm&fs=1&to=aishwaryabodhe1122@gmail.com&su=Let's%20Collaborate%20-%20Portfolio%20Inquiry&body=Hi%20Aishwarya,%0D%0A%0D%0AI%20came%20across%20your%20portfolio%20and%20I'm%20interested%20in%20discussing%20a%20potential%20opportunity.%0D%0A%0D%0AProject%20Details:%0D%0A-%20%0D%0A%0D%0ABest%20regards"
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=chaudharisushil96@gmail.com&su=Let's%20Collaborate%20-%20Portfolio%20Inquiry&body=Hi%20Sushil,%0D%0A%0D%0AI%20came%20across%20your%20portfolio%20and%20I'm%20interested%20in%20discussing%20a%20potential%20opportunity.%0D%0A%0D%0AProject%20Details:%0D%0A-%20%0D%0A%0D%0ABest%20regards"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn btn-primary btn-lg"
@@ -133,7 +133,7 @@ const Contact = () => {
                       <p className="text-muted mb-3">Connect with me on</p>
                       <div className="d-flex gap-3 justify-content-center">
                         <a 
-                          href="https://github.com/aishwaryabodhe1122"
+                          href="https://github.com/Sushil9731"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="social-link-large github-link"
@@ -142,7 +142,7 @@ const Contact = () => {
                           <SiGithub />
                         </a>
                         <a 
-                          href="https://linkedin.com/in/aishwarya-bodhe"
+                          href="https://www.linkedin.com/in/sushil-chaudhari-54460319b/"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="social-link-large linkedin-link"
@@ -151,7 +151,7 @@ const Contact = () => {
                           <SiLinkedin />
                         </a>
                         <a 
-                          href="https://mail.google.com/mail/?view=cm&fs=1&to=aishwaryabodhe1122@gmail.com&su=Let's%20Collaborate&body=Hi%20Aishwarya,%0D%0A%0D%0AI'd%20like%20to%20discuss%20a%20potential%20opportunity..."
+                          href="https://mail.google.com/mail/?view=cm&fs=1&to=chaudharisushil96@gmail.com&su=Let's%20Collaborate&body=Hi%20Sushil,%0D%0A%0D%0AI'd%20like%20to%20discuss%20a%20potential%20opportunity..."
                           target="_blank"
                           rel="noopener noreferrer"
                           className="social-link-large gmail-link"
