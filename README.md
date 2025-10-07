@@ -177,7 +177,6 @@ The website is fully responsive and optimized for:
 - **AI Resume Analysis** - AI-powered resume optimization
 - **Project Recommendations** - AI-suggested projects based on skills
 - **Career Insights** - Market analysis and career guidance
-- **Blog Section** - Technical articles and tutorials
 - **Admin Dashboard** - Content management system
 - **Analytics Dashboard** - Visitor and engagement analytics
 
@@ -224,7 +223,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Images from Unsplash (replace with your own)
 - Animations powered by CSS and Framer Motion
 - Built with love using Next.js and React
-
----
-
-**Made with ❤️ by Sushil Chaudhari**
